@@ -6,7 +6,7 @@
 #ifndef custom_headers
 #define custom_headers
 
-
+//All Library Includes that are required
 #include <ctype.h>
 #include <errno.h>
 #include <sys/types.h>
@@ -17,7 +17,7 @@
 
 //Pre Defined Values 
 #define ObjectsCount 20  //maximum number of JSON objects that can be parsed
-#define MAX_COLOR_VAL 255
+#define MAX_COLOR_VAL 255 //max value of RGB color 
 #define CAM 1
 #define SPH 2
 #define PLN 3
@@ -48,7 +48,7 @@ typedef struct QUADRIC {
 	double *coefficient;
 } QUADRIC;
 
-//structure to store data as an object
+//structure to store data as an object after parsing JSON data
 typedef struct OBJECT{
     int type;
     union {
@@ -59,7 +59,7 @@ typedef struct OBJECT{
     } data;
 } OBJECT;
 
-//structure of image 
+//structure of image to store image data
 typedef struct Image
 {
     int width;
@@ -71,25 +71,28 @@ typedef struct Image
     int maxval;
 }Image;
 
+// structure for ray equation
 typedef struct ray{
     double origin[3];
     double direction[3];
 } ray;
 
+//custom defined type Vector
 typedef double Vector[3]; 
-extern int line;  
-extern OBJECT objects[ObjectsCount]; 
-void read_scene(const char* filename);
 
+//member functions to read JSON data and write image
+void read_scene(const char* filename);
 void ImageWrite(Image *image, const char *filename,int format);
 
+//member functions to raycast and color image intersections 
 int getCameraPosition(OBJECT *objects);
 void colorPixel(double *color, int row, int col,Image *image);
 double planeIntersection(double *Ro, double *Rd, double *Pos, double *Norm);
 double sphereIntersection(double *Ro, double *Rd, double *C, double r);
-void raycasting(Image *image, double cam_width, double cam_height, OBJECT *object);
+double quadricIntersection (double *Ro, double *Rd, double *pos, double r, double *coefficient);
+void raycast(Image *image, double cam_width, double cam_height, OBJECT *object);
 
-
+//member functions for vector calculations
 double sqr(double v);
 double vectorLength(Vector a);
 void VectorAddition(Vector a, Vector b, Vector c);

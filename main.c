@@ -44,7 +44,7 @@ int main(int argc, const char * argv[]) {
     //Reading the camera position from parsed JSON data
 	int pos = getCameraPosition(objects);
 	
-    raycasting(image, objects[pos].data.camera.width, objects[pos].data.camera.height, objects);
+    raycast(image, objects[pos].data.camera.width, objects[pos].data.camera.height, objects);
     //writing Image to a PPM file
 	const char *output = argv[4];
 	ImageWrite(image, output,6);

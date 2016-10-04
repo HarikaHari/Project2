@@ -130,7 +130,7 @@ double quadricIntersection (double *Ro, double *Rd, double *pos, double r, doubl
     if(a == 0)
 	 return (-c/b); 
 	
-    double d = sqr(b) - 4*a*c;
+    double d = (sqr(b) - 4*a*c);
     
     if (d < 0) 
 	  return -1; 
@@ -140,8 +140,8 @@ double quadricIntersection (double *Ro, double *Rd, double *pos, double r, doubl
         t1 = -1*(b / (2*a));
        }
     else {  
-        t0 =( - b - sqrt(sqr(b) - (4*a*c)))/ 2*a;
-		t1 =( - b + sqrt(sqr(b) - (4*a*c)))/ 2*a;
+        t0 = (( - b - sqrt(sqr(b) - (4*a*c)))/ (2*a));
+		t1 = (( - b + sqrt(sqr(b) - (4*a*c)))/ (2*a));
 		}
         
     if (t0 < 0 && t1 < 0) 
@@ -158,12 +158,10 @@ double quadricIntersection (double *Ro, double *Rd, double *pos, double r, doubl
             return t0;
         else
             return t1;
-    }
-   	
-			
+    }		
 }
 
-void raycasting(Image *image, double cam_width, double cam_height, OBJECT *objects){
+void raycast(Image *image, double cam_width, double cam_height, OBJECT *objects){
     // loop over all pixels and test for intersections with objects
    
     int x, y, counter; 
