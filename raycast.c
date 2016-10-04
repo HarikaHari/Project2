@@ -66,51 +66,45 @@ double planeIntersection(double *Ro, double *Rd, double *Pos, double *Norm){
     
     }
 
-double sphereIntersection(double *Ro, double *Rd, double *C, double r){
+double sphereIntersection(double *Ro, double *Rd, double *pos, double r){
 
     double a, b, c;
     double s0,s1; // we have two solutions if delta >0
     //calculate quadratic formula
     //First find a, b, c
     a = sqr(Rd[0]) + sqr(Rd[1]) + sqr(Rd[2]);
-    b = 2 * (Rd[0]*(Ro[0]-C[0]) + Rd[1]*(Ro[1]-C[1]) + Rd[2]*(Ro[2]-C[2]));
-    c = sqr(Ro[0]-C[0]) + sqr(Ro[1]-C[1]) + sqr(Ro[2]-C[2]) - sqr(r);
-     // make sure a is 1 (means the ray direction was normalized)
+    b = 2 * (Rd[0]*(Ro[0]-pos[0]) + Rd[1]*(Ro[1]-pos[1]) + Rd[2]*(Ro[2]-pos[2]));
+    c = sqr(Ro[0]-pos[0]) + sqr(Ro[1]-pos[1]) + sqr(Ro[2]-pos[2]) - sqr(r);
+    
     if (a > 1.0001 || a < .9999) {
         printf("a = %lf\n", a);
         fprintf(stderr, "Ray direction was not normalized\n");
         exit(1);
     }
-    // check that discriminant is <, =, or > 0
-    double disc = sqr(b) - 4*a*c;
+    double d = sqr(b) - 4*a*c;
     
-    if (disc < 0) {
-        //printf("disc was < 0\n");
-        return -1; // no solution
-    }
-    else if (disc == 0) {
-        s0 = -1*(b / (2*a)); // single solution
+    if (d < 0) 
+	  return -1; 
+    
+    else if (d == 0) {
+        s0 = -1*(b / (2*a));
         s1 = -1*(b / (2*a));
-        //printf("t0 = %lf\n", t0);
-    }
-    else {  // 2 solutions: find the smaller
+       }
+    else {  
         s0 = (-1*b - sqrt(sqr(b) - 4*c))/2;
         s1 = (-1*b + sqrt(sqr(b) - 4*c))/2;
-
     }
-    
-    
-    if (s0 < 0 && s1 < 0) {
-        // no intersection
+        
+    if (s0 < 0 && s1 < 0) 
         return -1;
-    }
-    else if (s0 < 0 && s1 > 0) {
+
+    else if (s0 < 0 && s1 > 0) 
         return s1;
-    }
-    else if (s0 > 0 && s1 < 0) {
+    
+    else if (s0 > 0 && s1 < 0) 
         return s0;
-    }
-    else { // they were both positive
+    
+    else { 
         if (s0 <= s1)
             return s0;
         else
@@ -119,6 +113,55 @@ double sphereIntersection(double *Ro, double *Rd, double *C, double r){
     
 }
 
+double quadricIntersection (double *Ro, double *Rd, double *pos, double r, double *coefficient) {
+
+    double a, b, c;
+    double t0,t1; // we have two solutions if delta >0
+
+	a = coefficient[0]*sqr(Rd[0]) + coefficient[1]*sqr(Rd[1]) + coefficient[2]*sqr(Rd[2]) + coefficient[4]*Rd[0]*Rd[1] +
+        coefficient[5]*Rd[0]*Rd[2] + coefficient[5]*Rd[1]*Rd[2]; 
+	b = 2*coefficient[0]*Ro[0]*Rd[0] + 2*coefficient[1]*Ro[1]*Rd[1] + 2*coefficient[2]*Ro[2]*Rd[2] + 
+		coefficient[3]*(Ro[0]*Rd[1] + Ro[1]*Rd[0]) + coefficient[4]*Ro[0]*Rd[2] + coefficient[5]*(Ro[1]*Rd[2] + Rd[1]*Ro[2]) + 
+		coefficient[6]*Rd[0] + coefficient[7]*Rd[1] + coefficient[8]*Rd[2];
+	c = coefficient[0]*sqr(Rd[0]) + coefficient[1]*sqr(Ro[1]) + coefficient[2]*sqr(Ro[2]) + 
+		coefficient[3]*Ro[0]*Ro[1] + coefficient[4]*Ro[0]*Ro[2] + coefficient[5]*Ro[1]*Ro[2] + 
+		coefficient[6]*Ro[0] + coefficient[7]*Ro[1] + coefficient[8]*Ro[2] + coefficient[9];
+		
+    if(a == 0)
+	 return (-c/b); 
+	
+    double d = sqr(b) - 4*a*c;
+    
+    if (d < 0) 
+	  return -1; 
+    
+    else if (d == 0) {
+        t0 = -1*(b / (2*a));
+        t1 = -1*(b / (2*a));
+       }
+    else {  
+        t0 =( - b - sqrt(sqr(b) - (4*a*c)))/ 2*a;
+		t1 =( - b + sqrt(sqr(b) - (4*a*c)))/ 2*a;
+		}
+        
+    if (t0 < 0 && t1 < 0) 
+        return -1;
+
+    else if (t0 < 0 && t1 > 0) 
+        return t1;
+    
+    else if (t0 > 0 && t1 < 0) 
+        return t0;
+    
+    else { 
+        if (t0 <= t1)
+            return t0;
+        else
+            return t1;
+    }
+   	
+			
+}
 
 void raycasting(Image *image, double cam_width, double cam_height, OBJECT *objects){
     // loop over all pixels and test for intersections with objects
@@ -163,7 +206,11 @@ void raycasting(Image *image, double cam_width, double cam_height, OBJECT *objec
                         break;
                         
                     case PLN:
-                        t= planeIntersection(Ro, Rd, objects[counter].data.plane.position, objects[counter].data.plane.normal);
+                        t = planeIntersection(Ro, Rd, objects[counter].data.plane.position, objects[counter].data.plane.normal);
+                        break;
+						
+					case QUAD:
+                        t = quadricIntersection(Ro, Rd, objects[counter].data.quadric.position, objects[counter].data.quadric.radius, objects[counter].data.quadric.coefficient);
                         break;
                         
                     default:

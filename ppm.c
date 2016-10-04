@@ -7,8 +7,8 @@
 #include "custom.h"
 
  void ImageWrite(Image *buffer, const char *filename,int format) {
-	size_t num2;
-    int size = buffer->width * buffer->height * 4, i;
+    size_t num2;
+    int size = buffer->width * buffer->height * 4;
     FILE *fp = fopen(filename, "w");
     if (!fp) { 
         fprintf(stderr,"cannot open file for writing");
@@ -29,7 +29,7 @@
     fprintf(fp, "%d\n",buffer->maxval);
 
     // pixel data
-	 for(i=1; i<size+1;i++){    // for each for slots we skip it,
+	 for(int i=1; i<size+1;i++){    // for each for slots we skip it,
             char ch=buffer->data[i-1];
             if (i%4 !=0) {
                fwrite(&ch, 1, 1, fp);  // which means we skip A at here

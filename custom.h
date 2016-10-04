@@ -43,7 +43,9 @@ typedef struct PLANE {
 
 typedef struct QUADRIC {
     double *color;
-    double *coefficient;
+	double radius;
+    double *position;
+	double *coefficient;
 } QUADRIC;
 
 //structure to store data as an object
