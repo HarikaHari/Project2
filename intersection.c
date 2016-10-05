@@ -1,5 +1,5 @@
 /*
-  File Name    : raycast.c
+  File Name    : intersection.c
   Assignment   : Raycasting
   Created by   : Harika Hari (hh453). */
 
