@@ -85,9 +85,10 @@ char* next_string(FILE* json) {
 double next_number(FILE* json) {
     double value;
     fscanf(json, "%lf", &value);
+
     // Error check this..
-    if (value == EOF) {
-        fprintf(stderr, "Error: Expected a number but found EOF: %d\n", line);
+    if (value == NAN) {
+        fprintf(stderr, "Error: Expected a number but found NAN: %d\n", line);
         return -1;;
     }
     return value;
