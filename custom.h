@@ -43,9 +43,8 @@ typedef struct PLANE {
 
 typedef struct QUADRIC {
     double *color;
-	double radius;
     double *position;
-	double *coefficient;
+	double *coefficients;
 } QUADRIC;
 
 //structure to store data as an object after parsing JSON data
@@ -65,7 +64,6 @@ typedef struct Image
     int width;
     int height;
     char *data; 
-    int magic_number;
     int depth;
     char *tupltype;
     int maxval;
@@ -89,7 +87,7 @@ int getCameraPosition(OBJECT *objects);
 void colorPixel(double *color, int row, int col,Image *image);
 double planeIntersection(double *Ro, double *Rd, double *Pos, double *Norm);
 double sphereIntersection(double *Ro, double *Rd, double *C, double r);
-double quadricIntersection (double *Ro, double *Rd, double *pos, double r, double *coefficient);
+double quadricIntersection (double *Ro, double *Rd, double *pos, double *coefficient);
 void raycast(Image *image, double cam_width, double cam_height, OBJECT *object);
 
 //member functions for vector calculations

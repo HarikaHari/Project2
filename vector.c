@@ -9,7 +9,6 @@ double sqr(double v){
     return v*v;
 }
 
-
 double vectorLength(Vector a){
     return sqrt(sqr(a[0])+sqr(a[1])+sqr(a[2]));
 }

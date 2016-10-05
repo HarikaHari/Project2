@@ -122,11 +122,15 @@ double* parse_color(FILE* json) {
 }
 // This function at here is for quadric
 double* nextCoefficient(FILE* json){
-    double* v = malloc(10*sizeof(double));
+    
+	int i;
+	double* v = malloc(10*sizeof(double));
+	
     expect_c(json, '[');
     skip_ws(json);
     v[0] = next_number(json);
-    for(int i=1;i<10;i++){
+    
+	for(i=1;i<10;i++){
         skip_ws(json);
         expect_c(json, ',');
         skip_ws(json);
@@ -247,8 +251,6 @@ void read_scene(const char* filename) {
                     else if (strcmp(key, "radius") == 0) {
 						 if (object_type == SPH)
                          objects[counter].data.sphere.radius = next_number(json);
-						 else  if (object_type == QUAD)
-						 objects[counter].data.quadric.radius = next_number(json);
                     }
                     else if (strcmp(key, "color") == 0) {
                         if (object_type == SPH)
@@ -291,7 +293,7 @@ void read_scene(const char* filename) {
                             exit(1);
                         }
                         else
-                             objects[counter].data.quadric.coefficient = nextCoefficient(json);
+                             objects[counter].data.quadric.coefficients = nextCoefficient(json);
                         
                     }
                     else {
