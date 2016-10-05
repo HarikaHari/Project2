@@ -1,5 +1,5 @@
 /*
-  File Name    : main.c
+  File Name    : raycast.c
   Assignment   : Raycasting
   Created by   : Harika Hari (hh453). */
 
