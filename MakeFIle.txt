@@ -1,0 +1,9 @@
+Steps to compile and run raycast program using GCC compiler on Windows
+
+1) Navigate to the file path of raycast.c.
+2) Using the below command to compile raycast.c
+   Windows command: gcc raycast.c
+3) An output file with name 'a' will be automatically created by GCC compiler on windows machine.
+4) To run the program pass on the command line arguments in the following order
+   Windows command: a <Image-width> <image-height> <Input file path> <Output file path>
+5) The program should be able to display the image creation success or failure message.

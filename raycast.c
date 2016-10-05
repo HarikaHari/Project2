@@ -36,17 +36,20 @@ int main(int argc, const char * argv[]) {
     printf("Creating the Image\n");
     //Reading Image height, width, maxval and data
     image->width = atoi(argv[1]);
-    printf("image width is %d \n",image->width);
     image->height = atoi(argv[2]);
-    printf("image height is %d \n",image->height);
     image->maxval = 255;
     image->data =(unsigned char*) malloc(sizeof(unsigned char) * image->width * image->height*4);
     //Reading the camera position from parsed JSON data
 	int pos = getCameraPosition(objects);
-	
-    raycast(image, objects[pos].data.camera.width, objects[pos].data.camera.height, objects);
+	raycast(image, objects[pos].data.camera.width, objects[pos].data.camera.height, objects);
     //writing Image to a PPM file
 	const char *output = argv[4];
-	ImageWrite(image, output,6);
+	if(ImageWrite(image, output,6)) {
+	
+	printf("Created image width is %d \n",image->width);
+	printf("Created image height is %d \n",image->height);
+	printf("Image Creation Completed \n");
+	}
+	else printf("Unable to create an Image File \n");
     return 0;
 }

@@ -80,7 +80,7 @@ typedef double Vector[3];
 
 //member functions to read JSON data and write image
 void read_scene(const char* filename);
-void ImageWrite(Image *image, const char *filename,int format);
+int ImageWrite(Image *image, const char *filename,int format);
 
 //member functions to raycast and color image intersections 
 int getCameraPosition(OBJECT *objects);
